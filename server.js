@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var url = require('url');
 
 var Socrata = require('node-socrata');
 
@@ -34,32 +35,47 @@ app.use(require('body-parser').json())
 app.use(express.static(__dirname + '/dist'));
 
 
+// ?where=precinct%3D55+AND+state+%3D+'GA'
 app.get('/waittimes', function(req, res){
-  soda.get(req.params, function(err, response, data){
 
-  	if(err){
-  		return res.error(err);
-  	}
+  // var queryString = url.parse(req.url, true).search;
 
-  	res.json(data);
+  // console.log(queryString);
+
+  console.log(req.query);
+  soda.get(req.query, function(err, response, data){
+
+    if(err){
+      console.log(err);
+      res.status(500).json("err");
+      return;
+    }
+
+    res.json(data);
   })
 });
 
+function toSimpleObject(obj){
+  return JSON.parse(JSON.stringify(obj));
+}
+
 app.post('/waittimes', function(req, res){
 
-	console.log(req.params);
+  console.log(req.body);
 
-	soda.post(req.body, function(err, response, record){
+  soda.post(req.body, function(err, response, record){
 
-		if(err){
-			return res.error(err);
-		}
+    if(err){
+      console.log(err);
+      res.status(500).json("err");
+      return;
+    }
 
-		console.log(response);
+    console.log(response);
 
-		res.json(record);
+    res.json(record);
 
-	});
+  });
 });
 
 app.listen(process.env.PORT || 5000);
