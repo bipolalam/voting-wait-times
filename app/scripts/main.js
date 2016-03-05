@@ -22,6 +22,7 @@ var precinct = $.QueryString['precinct'];
 
 // { "timestamp": "2016-03-05T00:00:00", "precinct": "1", "waittime": 2, "reporterid": "e3f99640d60577f72086b54087423593", "state": "GA"}
 function addEstimate(precinctnum, state, email, waittime, callback){
+  console.log("adding time");
   $.ajax({
     method: 'POST',
     url: '/waittimes',
@@ -39,13 +40,14 @@ function addEstimate(precinctnum, state, email, waittime, callback){
 }
 
 function getTime(precinctnum, state, callback){
+  console.log("getting time");
   $.ajax({
     method: 'GET',
     url: '/waittimes',
     data: {
       where: 'precinct = '+precinctnum+' AND state = \''+state+'\'',
-      order: 'timestamp',
-      limit: 1
+      order: 'timestamp'
+      // limit: 1
     },
     dataType: 'json'
   }).then(callback);
@@ -53,10 +55,10 @@ function getTime(precinctnum, state, callback){
 
 
 var waitTimeMap = [
-  "None",
-  "Short",
-  "Medium",
-  "Long"
+  "No Line (whoo hoo!)",
+  "Small Line (Less than 10 min)",
+  "Medium Line (10-45 min)",
+  "Long Line (Over 45 min)"
 ];
 
 function drawTime() {
@@ -70,9 +72,10 @@ function drawTime() {
       $('.precinct-name').text(state + " Precinct "+precinct);
 
       if(res[0]){
-        $('.wait-time').text(waitTimeMap[res[0].waittime]);
+        var time = res[res.length-1];
+        $('.wait-time').text(waitTimeMap[time.waittime]);
 
-        $('.last-updated').text(new Date(res[0].timestamp).toRelativeString());
+        $('.last-updated').text(new Date(time.timestamp).toRelativeString());
       }else{
         $('.wait-time').text("Unknown");
 
@@ -82,15 +85,33 @@ function drawTime() {
 }
 
 
+function sendWait(time){
+  var email = $('.email-field').text();
+
+  addEstimate(precinct, state, email, time, function(){
+    drawTime();
+  });
+}
 
 $(document).ready(function(){
+
+    $('.state-field').text(state);
+    $('.precinct-field').text(precinct);
 
   // console.log("hello!");
 
   drawTime();
   setInterval(drawTime, 10*1000);
 
+  $('.btn-wait').click(function(){
+    var wait = $(this).attr('wait');
 
+    console.log("submit", wait);
+
+    sendWait(wait);
+  });
+
+  // $('.btn-panic')
 
   // addEstimate(55, 'GA', 'charles@rabidaudio.com', 4, function(res){
   //   console.log("done", res);
