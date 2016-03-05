@@ -86,7 +86,7 @@ function drawTime() {
 
 
 function sendWait(time){
-  var email = $('.email-field').text();
+  var email = $('.email-field').val();
 
   addEstimate(precinct, state, email, time, function(){
     drawTime();
@@ -95,13 +95,13 @@ function sendWait(time){
 
 $(document).ready(function(){
 
-    $('.state-field').text(state);
-    $('.precinct-field').text(precinct);
+    $('.state-field').val(state);
+    $('.precinct-field').val(precinct);
 
   // console.log("hello!");
 
   drawTime();
-  setInterval(drawTime, 10*1000);
+  setInterval(drawTime, 5*1000);
 
   $('.btn-wait').click(function(){
     var wait = $(this).attr('wait');
