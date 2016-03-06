@@ -98,16 +98,16 @@ $(document).ready(function(){
     $('.state-field').val(state);
     $('.precinct-field').val(precinct);
 
-  // drawTime();
-  // setInterval(drawTime, 5*1000);
+  drawTime();
+  setInterval(drawTime, 15*1000);
 
-  // $('.btn-wait').click(function(){
-  //   var wait = $(this).attr('wait');
+  $('.btn-wait').click(function(){
+    var wait = $(this).attr('wait');
 
-  //   console.log("submit", wait);
+    console.log("submit", wait);
 
-  //   sendWait(wait);
-  // });
+    sendWait(wait);
+  });
 
   // $('.btn-panic')
 });
