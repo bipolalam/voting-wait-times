@@ -46,8 +46,8 @@ function getTime(precinctnum, state, callback){
     url: '/waittimes',
     data: {
       where: 'precinct = '+precinctnum+' AND state = \''+state+'\'',
-      order: 'timestamp'
-      // limit: 1
+      order: 'timestamp DESC',
+      limit: 1
     },
     dataType: 'json'
   }).then(callback);
@@ -98,25 +98,16 @@ $(document).ready(function(){
     $('.state-field').val(state);
     $('.precinct-field').val(precinct);
 
-  // console.log("hello!");
+  // drawTime();
+  // setInterval(drawTime, 5*1000);
 
-  drawTime();
-  setInterval(drawTime, 5*1000);
+  // $('.btn-wait').click(function(){
+  //   var wait = $(this).attr('wait');
 
-  $('.btn-wait').click(function(){
-    var wait = $(this).attr('wait');
+  //   console.log("submit", wait);
 
-    console.log("submit", wait);
-
-    sendWait(wait);
-  });
+  //   sendWait(wait);
+  // });
 
   // $('.btn-panic')
-
-  // addEstimate(55, 'GA', 'charles@rabidaudio.com', 4, function(res){
-  //   console.log("done", res);
-  //   getTimes(55, 'GA', function(res){
-  //     console.log(res);
-  //   });
-  // });
 });

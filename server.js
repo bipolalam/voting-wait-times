@@ -1,38 +1,46 @@
 var express = require('express');
 var app = express();
 var url = require('url');
-
 var Socrata = require('node-socrata');
+var BodyParser = require('body-parser');
 
-// var dataSource = 'https://brigades.opendatanetwork.com/resource/ikiz-kvvr.json';
-// var appToken = '7SlEb1MrWlecn6kExGlU4lZhj';
-// var basicAuthToken = 'Y2hhcmxlc0ByYWJpZGF1ZGlvLmNvbTpPcDNuRGF0YSE=';
+var PRODUCTION = (process.env.ENVIRONMENT === 'production');
 
-// dataConfig = {
-//   hostDomain: 'https://brigades.opendatanetwork.com',
-//   resource: 'ikiz-kvvr',
-//   XAppToken: '7SlEb1MrWlecn6kExGlU4lZhj',
-//   username: 'charles@rabidaudio.com',
-//   password: 'Op3nData!'
-// }
-// var soda = new Socrata(config);
 
-var config = {
-  // find a hostDomain from the listSource method
-  hostDomain: 'https://brigades.opendatanetwork.com',
-  // An accessible API table from the host domain
-  resource: 'ikiz-kvvr',
-  // Create account and register app https://opendata.socrata.com
-  XAppToken: process.env.SOCRATA_APP_TOKEN || '7SlEb1MrWlecn6kExGlU4lZhj',
-  username: 'charles@rabidaudio.com',
-  password: 'Op3nData!'
-};
+if(!PRODUCTION){
+  // load environment variables from .env file
+  require('node-env-file')(__dirname + '/.env');
+}
 
-var soda = new Socrata(config);
+// access our data store (Socrata)
+var database = new Socrata({
+  hostDomain: process.env.HOST_DOMAIN || 'https://brigades.opendatanetwork.com',
+  resource:   process.env.RESOURCE    || 'ikiz-kvvr',
+  XAppToken:  process.env.SOCRATA_APP_TOKEN,
+  username:   process.env.SOCRATA_USERNAME,
+  password:   process.env.SOCRATA_PASSWORD
+});
 
-app.use(require('body-parser').json())
+// parse JSON-format submitted data
+app.use(BodyParser.json());
 
-app.use(express.static(__dirname + '/dist'));
+if(PRODUCTION){
+  // serve static assets
+  app.use(express.static(__dirname + '/dist'));
+}
+
+/*
+
+API Proposal:
+
+GET /states/:state_code/precincts => List of all precincts in state
+GET /states/:state_code/precincts/:id => Precinct info and latest wait time
+GET /states/:state_code/precincts/:id/wait_times => List of all reported wait times
+POST /states/:state_code/precincts/:id/wait_times => Report a new wait time
+
+*/
+
+// app.param(['state', 'precinct'], function(req, res, next))
 
 
 // ?where=precinct%3D55+AND+state+%3D+'GA'
@@ -43,39 +51,34 @@ app.get('/waittimes', function(req, res){
   // console.log(queryString);
 
   console.log(req.query);
-  soda.get(req.query, function(err, response, data){
+  database.get(req.query, function(err, response, data){
 
     if(err){
-      console.log(err);
-      res.status(500).json("err");
-      return;
+      console.log(err.entity);
+      res.json(err.entity);
+    }else{
+      res.json(data);
     }
-
-    res.json(data);
   })
 });
-
-function toSimpleObject(obj){
-  return JSON.parse(JSON.stringify(obj));
-}
 
 app.post('/waittimes', function(req, res){
 
   console.log(req.body);
 
-  soda.post(req.body, function(err, response, record){
-
+  database.post(req.body, function(err, response, record){
     if(err){
-      console.log(err);
-      res.status(500).json("err");
-      return;
+      console.log(err.entity);
+      res.json(err.entity);
+    }else{
+      res.json(record);
     }
-
-    console.log(response);
-
-    res.json(record);
-
   });
 });
 
-app.listen(process.env.PORT || 5000);
+var port = process.env.PORT || 5000;
+app.listen(port, function(){
+  console.log("server listening on "+port);
+});
+
+module.exports = app;
