@@ -13,7 +13,7 @@ $icon-font-path: '../fonts/';
 
 /* Space out content a bit */
 body {
-  padding-top: 20px;
+  padding-top: 5px;
   padding-bottom: 20px;
 }
 
@@ -89,6 +89,9 @@ body {
   min-height: 60vh;
 }
 
+.steps:first-of-type {
+  min-height: 55vh;
+}
 .steps:last-of-type {
     margin-bottom: 60px;
     text-align: center;
@@ -105,6 +108,11 @@ body {
 .big-number {
   font-size: 5em !important;
   margin-bottom: 0px !important;
+}
+
+.title-text {
+  color: #6b037c !important;
+  font-family: 'Oswald', sans-serif;
 }
 
 /* Responsive: Portrait tablets and up */
