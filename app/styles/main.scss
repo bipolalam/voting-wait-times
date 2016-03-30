@@ -86,6 +86,11 @@ body {
 
 .steps {
   margin-bottom: 20px;
+  height: 60vh;
+}
+
+.steps:last-of-type {
+    margin-bottom: 60px;
 }
 
 .big-number {
