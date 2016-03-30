@@ -45,25 +45,31 @@
 
         <!-- User role form -->
 
+        <div class="row">
           <form class="user-form">
             <p>Select whether you are:</p>
             <button type="New Game" class="btn btn-primary" role="button">A Volunteer</button>
             <button type="New Game" class="btn btn-primary" role="button">A Voter (non-volunteer)</button>
-         </form>
-
-         <!-- User registration form -->
-        <div class="col-md-4 col-md-4 col-md-4 col-xs-12">
-            <input type="text" name="userForm" class="form-control text email-field" autocomplete="off" placeholder="Enter your email" required/>
-            <input type="text" name="userForm" class="form-control text precinct-field" maxlength="3" autocomplete="off" placeholder="Your precinct #" required/>
-            <input type="text" name="userForm" class="form-control text state-field" maxlength="2" autocomplete="off" placeholder="Your state" required/>
+          </form>
         </div>
 
-        <p class="lead">Select the button that reflects the approximate wait time at this polling station right now.</p>
-        <button type="New Game" class="btn btn-primary btn-wait" wait="0" role="button">No Line (whoo hoo!)</button>
-        <button type="New Game" class="btn btn-success btn-wait" wait="1" role="button">Small Line (Less than 10 min)</button>
-        <button type="New Game" class="btn btn-info btn-wait" wait="2" role="button">Medium Line (10-45 min)</button>
-        <button type="New Game" class="btn btn-warning btn-wait" wait="3" role="button">Long Line (Over 45 min)</button>
-        <button type="New Game" class="btn btn-danger btn-panic" role="button">Panic, help!</button>
+         <!-- User registration form -->
+        <div class="row">
+          <div class="col-md-12">
+              <input type="text" name="userForm" class="form-control text email-field" autocomplete="off" placeholder="Enter your email" required/>
+              <input type="text" name="userForm" class="form-control text precinct-field" maxlength="3" autocomplete="off" placeholder="Your precinct #" required/>
+              <input type="text" name="userForm" class="form-control text state-field" maxlength="2" autocomplete="off" placeholder="Your state" required/>
+          </div>
+        </div>
+
+        <div class="row">
+          <p class="lead">Select the button that reflects the approximate wait time at this polling station right now.</p>
+          <button type="New Game" class="btn btn-primary btn-wait" wait="0" role="button">No Line (whoo hoo!)</button>
+          <button type="New Game" class="btn btn-success btn-wait" wait="1" role="button">Small Line (Less than 10 min)</button>
+          <button type="New Game" class="btn btn-info btn-wait" wait="2" role="button">Medium Line (10-45 min)</button>
+          <button type="New Game" class="btn btn-warning btn-wait" wait="3" role="button">Long Line (Over 45 min)</button>
+          <button type="New Game" class="btn btn-danger btn-panic" role="button">Panic, help!</button>
+        </div>
       </div>
 
 
