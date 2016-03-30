@@ -91,10 +91,15 @@ body {
 
 .steps:last-of-type {
     margin-bottom: 60px;
+    text-align: center;
 }
 
 .user-form {
   padding: 10px;
+}
+
+.final-state-text {
+  font-size: 5em;
 }
 
 .big-number {
